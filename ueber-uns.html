@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Über uns — Gridsink</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#08090d; --grid:rgba(255,255,255,0.04); --accent:#00ffc3; --accent2:#0066ff; --text:#e8eaf0; --muted:rgba(232,234,240,0.4); }
+    body { background:var(--bg); color:var(--text); font-family:'Syne',sans-serif; min-height:100vh; display:flex; flex-direction:column; position:relative; overflow-x:hidden; }
+    .grid-bg { position:fixed; inset:0; background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px); background-size:48px 48px; animation:gridShift 20s linear infinite; z-index:0; }
+    @keyframes gridShift { 0%{background-position:0 0} 100%{background-position:48px 48px} }
+    .blob { position:fixed; border-radius:50%; filter:blur(120px); opacity:0.15; pointer-events:none; z-index:0; }
+    .blob-1 { width:600px; height:600px; background:var(--accent2); top:-150px; left:-150px; animation:blobFloat 12s ease-in-out infinite alternate; }
+    .blob-2 { width:500px; height:500px; background:var(--accent); bottom:-100px; right:-100px; animation:blobFloat 16s ease-in-out infinite alternate-reverse; }
+    @keyframes blobFloat { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(40px,30px) scale(1.08)} }
+    body::after { content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px); pointer-events:none; z-index:100; }
+    nav { position:fixed; top:0; left:0; right:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:68px; animation:fadeDown 0.8s cubic-bezier(0.16,1,0.3,1) both; }
+    nav::before { content:''; position:absolute; inset:0; background:rgba(8,9,13,0.72); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border-bottom:1px solid rgba(255,255,255,0.05); z-index:-1; }
+    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .nav-logo-icon { width:26px; height:26px; display:grid; grid-template-columns:1fr 1fr 1fr; grid-template-rows:1fr 1fr 1fr; gap:2px; }
+    .nav-logo-icon span { border-radius:1px; background:var(--accent); animation:gridPulse 2.4s ease-in-out infinite; }
+    .nav-logo-icon span:nth-child(2),.nav-logo-icon span:nth-child(4),.nav-logo-icon span:nth-child(6),.nav-logo-icon span:nth-child(8) { background:var(--accent2); }
+    @keyframes gridPulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
+    .nav-logo-name { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; background:linear-gradient(135deg,var(--text) 40%,var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .nav-links { display:flex; align-items:center; list-style:none; position:absolute; left:50%; transform:translateX(-50%); }
+    .nav-links li a { display:flex; align-items:center; gap:6px; font-family:'Space Mono',monospace; font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; padding:6px 18px; border-radius:4px; transition:color 0.2s; position:relative; }
+    .nav-links li a::after { content:''; position:absolute; bottom:-1px; left:50%; transform:translateX(-50%); width:0; height:1px; background:var(--accent); transition:width 0.25s cubic-bezier(0.16,1,0.3,1); }
+    .nav-links li a:hover { color:var(--text); }
+    .nav-links li a:hover::after,.nav-links li a.active::after { width:calc(100% - 36px); }
+    .nav-links li a.active { color:var(--accent); }
+    .nav-dot { width:5px; height:5px; border-radius:50%; background:var(--accent); display:inline-block; animation:blink 1.4s ease-in-out infinite; }
+    .nav-cta { display:flex; align-items:center; gap:12px; }
+    .nav-tag { font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:6px; }
+    .nav-tag-dot { width:5px; height:5px; border-radius:50%; background:var(--accent); animation:blink 1.4s ease-in-out infinite; }
+    .btn-outline { font-family:'Space Mono',monospace; font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); background:transparent; border:1px solid rgba(0,255,195,0.35); border-radius:4px; padding:8px 18px; cursor:pointer; text-decoration:none; transition:background 0.2s,border-color 0.2s,color 0.2s; white-space:nowrap; }
+    .btn-outline:hover { background:rgba(0,255,195,0.08); border-color:var(--accent); color:#fff; }
+    .nav-sep { width:1px; height:16px; background:rgba(255,255,255,0.1); margin:0 4px; }
+    .hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; z-index:60; }
+    .hamburger span { display:block; width:22px; height:2px; background:var(--muted); border-radius:2px; transition:transform 0.3s,opacity 0.3s,background 0.2s; }
+    .hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); background:var(--accent); }
+    .hamburger.open span:nth-child(2) { opacity:0; }
+    .hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); background:var(--accent); }
+    .mobile-menu { position:fixed; top:68px; left:0; right:0; background:rgba(8,9,13,0.96); backdrop-filter:blur(24px); border-bottom:1px solid rgba(255,255,255,0.06); z-index:49; padding:1.5rem 2.5rem 2rem; transform:translateY(-8px); opacity:0; pointer-events:none; transition:transform 0.3s cubic-bezier(0.16,1,0.3,1),opacity 0.3s; }
+    .mobile-menu.open { transform:translateY(0); opacity:1; pointer-events:auto; }
+    .mobile-menu a { font-family:'Space Mono',monospace; font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:space-between; transition:color 0.2s; }
+    .mobile-menu a:last-child { border-bottom:none; }
+    .mobile-menu a:hover,.mobile-menu a.active { color:var(--accent); }
+    .mobile-menu a .arrow { opacity:0.3; transition:opacity 0.2s,transform 0.2s; }
+    .mobile-menu a:hover .arrow { opacity:1; transform:translateX(4px); }
+    .corner { position:fixed; width:32px; height:32px; opacity:0.3; z-index:5; }
+    .corner::before,.corner::after { content:''; position:absolute; background:var(--accent); }
+    .corner::before { width:2px; height:100%; }
+    .corner::after  { width:100%; height:2px; }
+    .corner-tl { top:24px; left:24px; }
+    .corner-tr { top:24px; right:24px; transform:scaleX(-1); }
+    .corner-bl { bottom:24px; left:24px; transform:scaleY(-1); }
+    .corner-br { bottom:24px; right:24px; transform:scale(-1); }
+    main { position:relative; z-index:10; padding:120px 2.5rem 6rem; max-width:900px; width:100%; margin:0 auto; }
+    .page-header { margin-bottom:4rem; animation:fadeDown 0.8s 0.1s cubic-bezier(0.16,1,0.3,1) both; }
+    .page-tag { display:inline-flex; align-items:center; gap:8px; font-family:'Space Mono',monospace; font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:1.5rem; }
+    .page-tag::before { content:'//'; opacity:0.4; margin-right:4px; }
+    h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:800; line-height:1.08; letter-spacing:-0.02em; margin-bottom:1.2rem; }
+    h1 em { font-style:normal; color:var(--accent); }
+    .page-lead { font-size:1.05rem; color:var(--muted); line-height:1.75; max-width:600px; font-weight:400; }
+    .divider { width:60px; height:2px; background:linear-gradient(90deg,var(--accent2),var(--accent)); border-radius:2px; margin:2.5rem 0; }
+    .section-title { font-family:'Space Mono',monospace; font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); margin-bottom:1.5rem; display:flex; align-items:center; gap:12px; }
+    .section-title::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.06); }
+    /* MISSION BLOCK */
+    .mission { background:rgba(0,255,195,0.04); border:1px solid rgba(0,255,195,0.12); border-radius:8px; padding:2.5rem; margin-bottom:3rem; animation:fadeUp 0.6s 0.2s cubic-bezier(0.16,1,0.3,1) both; }
+    .mission blockquote { font-size:clamp(1.1rem,2.5vw,1.4rem); font-weight:700; line-height:1.55; letter-spacing:-0.01em; margin-bottom:1rem; }
+    .mission blockquote em { font-style:normal; color:var(--accent); }
+    .mission cite { font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); font-style:normal; }
+    /* TEAM */
+    .team-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:1.5rem; margin-bottom:3rem; }
+    .team-card { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:2rem 1.5rem; text-align:center; transition:border-color 0.2s,background 0.2s; animation:fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
+    .team-card:hover { border-color:rgba(0,255,195,0.2); background:rgba(0,255,195,0.03); }
+    .avatar { width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,var(--accent2),var(--accent)); margin:0 auto 1rem; display:flex; align-items:center; justify-content:center; font-size:1.3rem; font-weight:800; color:var(--bg); }
+    .team-card h3 { font-size:1rem; font-weight:700; margin-bottom:0.3rem; }
+    .team-role { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); margin-bottom:0.7rem; }
+    .team-card p { font-size:0.82rem; color:var(--muted); line-height:1.6; }
+    /* VALUES */
+    .values { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; }
+    .value-item { display:flex; gap:1rem; padding:1.4rem; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:8px; animation:fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both; transition:border-color 0.2s; }
+    .value-item:hover { border-color:rgba(0,255,195,0.15); }
+    .value-num { font-family:'Space Mono',monospace; font-size:0.65rem; color:var(--accent); opacity:0.6; padding-top:3px; flex-shrink:0; }
+    .value-item h4 { font-size:0.95rem; font-weight:700; margin-bottom:0.35rem; }
+    .value-item p { font-size:0.83rem; color:var(--muted); line-height:1.6; }
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-18px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeUp   { from{opacity:0;transform:translateY(20px)}  to{opacity:1;transform:translateY(0)} }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+    @media (max-width:700px) { .nav-links,.nav-sep,.nav-tag{display:none} .hamburger{display:flex} nav{padding:0 1.5rem} main{padding:100px 1.5rem 4rem} }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div><div class="corner corner-br"></div>
+  <nav>
+    <a class="nav-logo" href="index.html">
+      <div class="nav-logo-icon"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="nav-logo-name">Gridsink</div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="produkt.html">Produkt</a></li>
+      <li><a href="roadmap.html">Roadmap</a></li>
+      <li><a href="ueber-uns.html" class="active"><span class="nav-dot"></span>&nbsp;Über uns</a></li>
+      <li><a href="blog.html">Blog</a></li>
+    </ul>
+    <div class="nav-cta">
+      <div class="nav-tag"><span class="nav-tag-dot"></span>Im Aufbau</div>
+      <div class="nav-sep"></div>
+      <a href="mailto:gridsink@gmail.com" class="btn-outline">Kontakt</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menü öffnen"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home <span class="arrow">→</span></a>
+    <a href="produkt.html">Produkt <span class="arrow">→</span></a>
+    <a href="roadmap.html">Roadmap <span class="arrow">→</span></a>
+    <a href="ueber-uns.html" class="active">Über uns <span class="arrow">→</span></a>
+    <a href="blog.html">Blog <span class="arrow">→</span></a>
+    <a href="mailto:gridsink@gmail.com">Kontakt <span class="arrow">→</span></a>
+  </div>
+  <main>
+    <div class="page-header">
+      <div class="page-tag">Über uns</div>
+      <h1>Wir bauen die<br>Infrastruktur von <em>morgen.</em></h1>
+      <div class="divider"></div>
+      <p class="page-lead">Gridsink entstand aus einer einfachen Beobachtung: Daten existieren überall, aber sie fließen nirgendwo richtig. Wir ändern das.</p>
+    </div>
+    <div class="mission">
+      <blockquote>„Wir glauben, dass jedes Unternehmen — egal wie groß — das Recht hat, seine Daten <em>vollständig zu verstehen</em> und zu kontrollieren."</blockquote>
+      <cite>— Das Gridsink-Team, gegründet 2024</cite>
+    </div>
+    <p class="section-title">Das Team</p>
+    <div class="team-grid">
+      <div class="team-card" style="animation-delay:0.1s">
+        <div class="avatar">MK</div>
+        <h3>Max Kellner</h3>
+        <div class="team-role">Co-Founder & CEO</div>
+        <p>Ex-Infrastruktur-Engineer bei einem DAX-Konzern. Obsessed mit Systemen, die einfach funktionieren.</p>
+      </div>
+      <div class="team-card" style="animation-delay:0.2s">
+        <div class="avatar">SR</div>
+        <h3>Sara Reiter</h3>
+        <div class="team-role">Co-Founder & CTO</div>
+        <p>Distributed-Systems-Spezialistin. Hat vor Gridsink an Echtzeit-Pipelines für Finanzmärkte gearbeitet.</p>
+      </div>
+      <div class="team-card" style="animation-delay:0.3s">
+        <div class="avatar">TN</div>
+        <h3>Tim Nowak</h3>
+        <div class="team-role">Head of Design</div>
+        <p>Glaubt, dass gute Software sich genauso gut anfühlen muss wie sie funktioniert. Kein Kompromiss.</p>
+      </div>
+      <div class="team-card" style="animation-delay:0.4s">
+        <div class="avatar">LB</div>
+        <h3>Lena Berger</h3>
+        <div class="team-role">Head of Growth</div>
+        <p>Bringt die richtigen Menschen zu Gridsink — Kunden, Partner, Investoren. Netzwerk als Superkraft.</p>
+      </div>
+    </div>
+    <p class="section-title">Unsere Werte</p>
+    <div class="values">
+      <div class="value-item" style="animation-delay:0.1s"><div class="value-num">01</div><div><h4>Klarheit über Komplexität</h4><p>Wir vereinfachen — nicht auf Kosten der Tiefe, sondern durch besseres Design.</p></div></div>
+      <div class="value-item" style="animation-delay:0.2s"><div class="value-num">02</div><div><h4>Ehrlichkeit zuerst</h4><p>Mit Nutzern, mit Investoren, miteinander. Keine leeren Versprechen.</p></div></div>
+      <div class="value-item" style="animation-delay:0.3s"><div class="value-num">03</div><div><h4>Langsam bauen, schnell liefern</h4><p>Durchdacht planen, dann ohne Zögern umsetzen. Qualität und Tempo schließen sich nicht aus.</p></div></div>
+      <div class="value-item" style="animation-delay:0.4s"><div class="value-num">04</div><div><h4>Nutzer im Mittelpunkt</h4><p>Jede Entscheidung beginnt mit der Frage: Was braucht der Mensch, der das nutzt?</p></div></div>
+    </div>
+  </main>
+  <script>
+    const btn=document.getElementById('hamburger'),menu=document.getElementById('mobileMenu');
+    btn.addEventListener('click',()=>{const o=menu.classList.toggle('open');btn.classList.toggle('open',o);btn.setAttribute('aria-label',o?'Menü schließen':'Menü öffnen');});
+    document.addEventListener('click',e=>{if(!btn.contains(e.target)&&!menu.contains(e.target)){menu.classList.remove('open');btn.classList.remove('open');}});
+  </script>
+</body>
+</html>
