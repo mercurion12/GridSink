@@ -126,22 +126,22 @@
     </div>
     <p class="section-title">Kernfunktionen</p>
     <div class="card-grid cols-2" style="margin-bottom:3rem">
-      <div class="card" style="animation-delay:0.1s">
+      <div class="card ee-card" id="ee-01" style="animation-delay:0.1s;cursor:pointer">
         <div class="card-label">01 — Datenfluss</div>
         <h3>Echtzeit-Synchronisation</h3>
         <p>Alle Datenquellen fließen in eine einheitliche Pipeline. Keine Latenz, keine Duplikate — nur saubere, aktuelle Informationen.</p>
       </div>
-      <div class="card" style="animation-delay:0.2s">
+      <div class="card ee-card" id="ee-02" style="animation-delay:0.2s;cursor:pointer">
         <div class="card-label">02 — Steuerung</div>
         <h3>Intelligentes Dashboard</h3>
         <p>Behalte den Überblick über alle Prozesse in einem modularen Interface, das sich an deinen Workflow anpasst.</p>
       </div>
-      <div class="card" style="animation-delay:0.3s">
+      <div class="card ee-card" id="ee-03" style="animation-delay:0.3s;cursor:pointer">
         <div class="card-label">03 — Integration</div>
         <h3>500+ Konnektoren</h3>
         <p>Verbinde bestehende Tools nahtlos. Von Legacy-Systemen bis zu modernen APIs — Gridsink spricht jede Sprache.</p>
       </div>
-      <div class="card" style="animation-delay:0.4s">
+      <div class="card ee-card" id="ee-04" style="animation-delay:0.4s;cursor:pointer">
         <div class="card-label">04 — Sicherheit</div>
         <h3>Zero-Trust Architektur</h3>
         <p>Jede Verbindung wird verifiziert, jede Anfrage protokolliert. Enterprise-Sicherheit ohne Enterprise-Komplexität.</p>
@@ -149,15 +149,89 @@
     </div>
     <p class="section-title">Zahlen</p>
     <div class="card-grid cols-3">
-      <div class="card" style="animation-delay:0.2s;text-align:center"><div class="stat-val">&lt;10ms</div><p>Durchschnittliche Latenz</p></div>
-      <div class="card" style="animation-delay:0.3s;text-align:center"><div class="stat-val">99.9%</div><p>Verfügbarkeit (SLA)</p></div>
-      <div class="card" style="animation-delay:0.4s;text-align:center"><div class="stat-val">AES-256</div><p>Verschlüsselung at rest</p></div>
+      <div class="card ee-card" id="ee-10ms" style="animation-delay:0.2s;text-align:center;cursor:pointer"><div class="stat-val">&lt;10ms</div><p>Durchschnittliche Latenz</p></div>
+      <div class="card ee-card" id="ee-999" style="animation-delay:0.3s;text-align:center;cursor:pointer"><div class="stat-val">99.9%</div><p>Verfügbarkeit (SLA)</p></div>
+      <div class="card ee-card" id="ee-aes" style="animation-delay:0.4s;text-align:center;cursor:pointer"><div class="stat-val">AES-256</div><p>Verschlüsselung at rest</p></div>
+    </div>
+
+    <!-- Easter Egg Input -->
+    <div id="ee-field" style="display:none;margin-top:2rem;animation:fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both">
+      <div style="background:rgba(0,255,195,0.04);border:1px solid rgba(0,255,195,0.2);border-radius:8px;padding:2rem;max-width:420px;position:relative;overflow:hidden">
+        <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,195,0.5),transparent)"></div>
+        <div style="font-family:'Space Mono',monospace;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:0.8rem">// Zugang erforderlich</div>
+        <div style="font-size:0.95rem;color:var(--muted);margin-bottom:1.4rem;line-height:1.6">Du hast etwas gefunden. Gib den Code ein.</div>
+        <div style="display:flex;gap:0.6rem">
+          <input id="ee-input" type="text" maxlength="10" placeholder=""
+            style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:5px;color:var(--text);font-family:'Space Mono',monospace;font-size:1.1rem;letter-spacing:0.3em;padding:0.75rem 1rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s;text-align:center"
+            onfocus="this.style.borderColor='rgba(0,255,195,0.45)';this.style.boxShadow='0 0 0 3px rgba(0,255,195,0.08)'"
+            onblur="this.style.borderColor='rgba(255,255,255,0.1)';this.style.boxShadow=''"
+            onkeydown="if(event.key==='Enter')eeSubmit()" />
+          <button onclick="eeSubmit()"
+            style="background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;border-radius:5px;color:var(--bg);font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;padding:0.75rem 1.2rem;cursor:pointer;transition:opacity 0.2s,transform 0.15s;white-space:nowrap"
+            onmouseover="this.style.opacity='0.88';this.style.transform='translateY(-1px)'"
+            onmouseout="this.style.opacity='1';this.style.transform=''">
+            Eingabe →
+          </button>
+        </div>
+        <div id="ee-result" style="margin-top:1rem;font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;min-height:1.2em;transition:opacity 0.3s"></div>
+      </div>
     </div>
   </main>
   <script>
+    // Hamburger
     const btn=document.getElementById('hamburger'),menu=document.getElementById('mobileMenu');
     btn.addEventListener('click',()=>{const o=menu.classList.toggle('open');btn.classList.toggle('open',o);btn.setAttribute('aria-label',o?'Menü schließen':'Menü öffnen');});
     document.addEventListener('click',e=>{if(!btn.contains(e.target)&&!menu.contains(e.target)){menu.classList.remove('open');btn.classList.remove('open');}});
+
+    // Easter Egg
+    const EE_SEQ = ['ee-01','ee-04','ee-10ms'];
+    const EE_ALL = ['ee-01','ee-02','ee-03','ee-04','ee-10ms','ee-999','ee-aes'];
+    let eeProgress = 0;
+
+    function eeFlash(id, color='rgba(0,255,195,0.55)') {
+      const el = document.getElementById(id);
+      el.style.borderColor = color;
+      el.style.boxShadow   = color === 'rgba(0,255,195,0.55)' ? '0 0 18px rgba(0,255,195,0.15)' : '0 0 12px rgba(255,80,80,0.1)';
+      setTimeout(() => { el.style.borderColor=''; el.style.boxShadow=''; }, 500);
+    }
+
+    EE_ALL.forEach(id => {
+      document.getElementById(id).addEventListener('click', () => {
+        if (id === EE_SEQ[eeProgress]) {
+          eeFlash(id);
+          eeProgress++;
+          if (eeProgress === EE_SEQ.length) {
+            eeProgress = 0;
+            const field = document.getElementById('ee-field');
+            field.style.display = 'block';
+            field.scrollIntoView({ behavior:'smooth', block:'nearest' });
+            setTimeout(() => document.getElementById('ee-input').focus(), 400);
+          }
+        } else {
+          eeFlash(id, 'rgba(255,80,80,0.4)');
+          eeProgress = 0;
+          // If they happened to click the first correct one, start sequence
+          if (id === EE_SEQ[0]) {
+            eeFlash(id);
+            eeProgress = 1;
+          }
+        }
+      });
+    });
+
+    function eeSubmit() {
+      const val    = document.getElementById('ee-input').value.trim();
+      const result = document.getElementById('ee-result');
+      if (val === '007') {
+        result.style.color = 'var(--accent)';
+        result.textContent = '✦ Korrekt';
+      } else {
+        result.style.color = 'rgba(255,80,80,0.8)';
+        result.textContent = '✕ Falscher Code';
+        document.getElementById('ee-input').style.borderColor = 'rgba(255,80,80,0.5)';
+        setTimeout(() => { document.getElementById('ee-input').style.borderColor=''; }, 1500);
+      }
+    }
   </script>
 </body>
 </html>
