@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Produkt — Gridsink</title>
+  <title>Kontakt — Gridsink</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
@@ -17,6 +17,8 @@
     .blob-2 { width:500px; height:500px; background:var(--accent); bottom:-100px; right:-100px; animation:blobFloat 16s ease-in-out infinite alternate-reverse; }
     @keyframes blobFloat { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(40px,30px) scale(1.08)} }
     body::after { content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px); pointer-events:none; z-index:100; }
+
+    /* NAV */
     nav { position:fixed; top:0; left:0; right:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:68px; animation:fadeDown 0.8s cubic-bezier(0.16,1,0.3,1) both; }
     nav::before { content:''; position:absolute; inset:0; background:rgba(8,9,13,0.72); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border-bottom:1px solid rgba(255,255,255,0.05); z-index:-1; }
     .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
@@ -43,44 +45,126 @@
     .hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); background:var(--accent); }
     .hamburger.open span:nth-child(2) { opacity:0; }
     .hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); background:var(--accent); }
-    .mobile-menu { position:fixed; top:68px; left:0; right:0; background:rgba(8,9,13,0.96); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border-bottom:1px solid rgba(255,255,255,0.06); z-index:49; padding:1.5rem 2.5rem 2rem; transform:translateY(-8px); opacity:0; pointer-events:none; transition:transform 0.3s cubic-bezier(0.16,1,0.3,1),opacity 0.3s; }
+    .mobile-menu { position:fixed; top:68px; left:0; right:0; background:rgba(8,9,13,0.96); backdrop-filter:blur(24px); border-bottom:1px solid rgba(255,255,255,0.06); z-index:49; padding:1.5rem 2.5rem 2rem; transform:translateY(-8px); opacity:0; pointer-events:none; transition:transform 0.3s cubic-bezier(0.16,1,0.3,1),opacity 0.3s; }
     .mobile-menu.open { transform:translateY(0); opacity:1; pointer-events:auto; }
     .mobile-menu a { font-family:'Space Mono',monospace; font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); text-decoration:none; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:space-between; transition:color 0.2s; }
     .mobile-menu a:last-child { border-bottom:none; }
     .mobile-menu a:hover,.mobile-menu a.active { color:var(--accent); }
     .mobile-menu a .arrow { opacity:0.3; transition:opacity 0.2s,transform 0.2s; }
     .mobile-menu a:hover .arrow { opacity:1; transform:translateX(4px); }
+
+    /* CORNERS — oben links/rechts an den Blob-Dreiecken ausgerichtet */
     .corner { position:fixed; width:32px; height:32px; opacity:0.3; z-index:5; }
     .corner::before,.corner::after { content:''; position:absolute; background:var(--accent); }
     .corner::before { width:2px; height:100%; }
     .corner::after  { width:100%; height:2px; }
-    .corner-tl { top:20px; left:20px; }
-    .corner-tr { top:20px; right:20px; transform:scaleX(-1); }
+    .corner-tl { top:24px; left:24px; }
+    .corner-tr { top:24px; right:24px; transform:scaleX(-1); }
     .corner-bl { bottom:24px; left:24px; transform:scaleY(-1); }
     .corner-br { bottom:24px; right:24px; transform:scale(-1); }
+
+    /* MAIN */
     main { position:relative; z-index:10; padding:120px 2.5rem 6rem; max-width:900px; width:100%; margin:0 auto; }
+
+    /* PAGE HEADER */
     .page-header { margin-bottom:4rem; animation:fadeDown 0.8s 0.1s cubic-bezier(0.16,1,0.3,1) both; }
     .page-tag { display:inline-flex; align-items:center; gap:8px; font-family:'Space Mono',monospace; font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:1.5rem; }
     .page-tag::before { content:'//'; opacity:0.4; margin-right:4px; }
     h1 { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:800; line-height:1.08; letter-spacing:-0.02em; margin-bottom:1.2rem; }
     h1 em { font-style:normal; color:var(--accent); }
-    .page-lead { font-size:1.05rem; color:var(--muted); line-height:1.75; max-width:560px; font-weight:400; }
+    .page-lead { font-size:1.05rem; color:var(--muted); line-height:1.75; max-width:520px; font-weight:400; }
     .divider { width:60px; height:2px; background:linear-gradient(90deg,var(--accent2),var(--accent)); border-radius:2px; margin:2.5rem 0; }
-    .section-title { font-family:'Space Mono',monospace; font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); margin-bottom:1.5rem; display:flex; align-items:center; gap:12px; }
-    .section-title::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.06); }
-    .card-grid { display:grid; gap:1.5rem; }
-    .card-grid.cols-2 { grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); }
-    .card-grid.cols-3 { grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); }
-    .card { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:1.8rem; transition:border-color 0.2s,background 0.2s; animation:fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
-    .card:hover { border-color:rgba(0,255,195,0.2); background:rgba(0,255,195,0.03); }
-    .card-label { font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:0.8rem; }
-    .card h3 { font-size:1.15rem; font-weight:700; margin-bottom:0.6rem; line-height:1.3; }
-    .card p { font-size:0.9rem; color:var(--muted); line-height:1.65; }
-    .stat-val { font-size:2.4rem; font-weight:800; color:var(--accent); margin-bottom:0.3rem; }
+
+    /* LAYOUT */
+    .contact-layout { display:grid; grid-template-columns:1fr 1.7fr; gap:3rem; align-items:start; }
+
+    /* INFO PANEL */
+    .contact-info { animation:fadeUp 0.6s 0.2s cubic-bezier(0.16,1,0.3,1) both; }
+    .info-block { margin-bottom:2.5rem; }
+    .info-label { font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:0.6rem; }
+    .info-value { font-size:0.95rem; line-height:1.65; color:var(--muted); }
+    .info-value a { color:var(--text); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.15); padding-bottom:1px; transition:color 0.2s,border-color 0.2s; }
+    .info-value a:hover { color:var(--accent); border-color:rgba(0,255,195,0.4); }
+    .response-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(0,255,195,0.06); border:1px solid rgba(0,255,195,0.18); border-radius:99px; padding:7px 14px; font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); margin-top:2rem; }
+    .response-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); animation:blink 1.4s ease-in-out infinite; }
+
+    /* FORM */
+    .contact-form-wrap { animation:fadeUp 0.6s 0.3s cubic-bezier(0.16,1,0.3,1) both; }
+    .form-card { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:2.5rem; position:relative; overflow:hidden; }
+    .form-card::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(0,255,195,0.3),transparent); }
+
+    .field { margin-bottom:1.5rem; }
+    .field:last-of-type { margin-bottom:2rem; }
+    label { display:block; font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:0.6rem; }
+    label span { color:var(--accent); margin-left:2px; }
+
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+      width:100%; background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.09); border-radius:5px;
+      color:var(--text); font-family:'Syne',sans-serif; font-size:0.95rem;
+      padding:0.85rem 1rem; outline:none;
+      transition:border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      -webkit-appearance:none; appearance:none;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color:rgba(0,255,195,0.45);
+      background:rgba(0,255,195,0.04);
+      box-shadow:0 0 0 3px rgba(0,255,195,0.08);
+    }
+    input::placeholder, textarea::placeholder { color:var(--muted); font-family:'Syne',sans-serif; }
+    textarea { resize:vertical; min-height:130px; line-height:1.6; }
+
+    /* custom select arrow */
+    .select-wrap { position:relative; }
+    .select-wrap::after { content:'↓'; position:absolute; right:1rem; top:50%; transform:translateY(-50%); color:var(--muted); font-size:0.8rem; pointer-events:none; font-family:'Space Mono',monospace; }
+    select option { background:var(--bg); color:var(--text); }
+
+    /* field row */
+    .field-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+
+    /* submit */
+    .btn-submit {
+      width:100%; padding:1rem; border:none; border-radius:5px; cursor:pointer;
+      font-family:'Space Mono',monospace; font-size:0.72rem; letter-spacing:0.12em;
+      text-transform:uppercase; font-weight:700;
+      background:linear-gradient(135deg,var(--accent2),var(--accent));
+      color:var(--bg); position:relative; overflow:hidden;
+      transition:opacity 0.2s, transform 0.15s;
+    }
+    .btn-submit:hover { opacity:0.9; transform:translateY(-1px); }
+    .btn-submit:active { transform:translateY(0); }
+    .btn-submit::before {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);
+      opacity:0; transition:opacity 0.2s;
+    }
+    .btn-submit:hover::before { opacity:1; }
+
+    /* success state */
+    .success-msg { display:none; text-align:center; padding:2.5rem 1rem; }
+    .success-msg .check { font-size:2.5rem; margin-bottom:1rem; }
+    .success-msg h3 { font-size:1.2rem; font-weight:700; margin-bottom:0.5rem; }
+    .success-msg p { font-size:0.88rem; color:var(--muted); line-height:1.65; }
+
     @keyframes fadeDown { from{opacity:0;transform:translateY(-18px)} to{opacity:1;transform:translateY(0)} }
     @keyframes fadeUp   { from{opacity:0;transform:translateY(20px)}  to{opacity:1;transform:translateY(0)} }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-    @media (max-width:700px) { .nav-links,.nav-sep,.nav-tag{display:none} .hamburger{display:flex} nav{padding:0 1.5rem} main{padding:100px 1.5rem 4rem} }
+
+    @media (max-width:700px) {
+      .nav-links,.nav-sep,.nav-tag { display:none; }
+      .hamburger { display:flex; }
+      nav { padding:0 1.5rem; }
+      main { padding:100px 1.5rem 4rem; }
+      .contact-layout { grid-template-columns:1fr; gap:2rem; }
+      .field-row { grid-template-columns:1fr; }
+      .form-card { padding:1.8rem 1.4rem; }
+    }
   </style>
 </head>
 <body>
@@ -89,6 +173,7 @@
   <div class="blob blob-2"></div>
   <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
   <div class="corner corner-bl"></div><div class="corner corner-br"></div>
+
   <nav>
     <a class="nav-logo" href="index.html">
       <div class="nav-logo-icon"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
@@ -96,68 +181,127 @@
     </a>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
-      <li><a href="produkt.html" class="active"><span class="nav-dot"></span>&nbsp;Produkt</a></li>
+      <li><a href="produkt.html">Produkt</a></li>
       <li><a href="roadmap.html">Roadmap</a></li>
       <li><a href="ueber-uns.html">Über uns</a></li>
       <li><a href="blog.html">Blog</a></li>
-      <li><a href="kontakt.html">Kontakt</a></li>
+      <li><a href="kontakt.html" class="active"><span class="nav-dot"></span>&nbsp;Kontakt</a></li>
     </ul>
     <div class="nav-cta">
       <div class="nav-tag"><span class="nav-tag-dot"></span>Im Aufbau</div>
       <div class="nav-sep"></div>
-      <a href="mailto:gridsink@gmail.com" class="btn-outline">Kontakt</a>
+      <a href="kontakt.html" class="btn-outline active" style="color:#fff;background:rgba(0,255,195,0.1);border-color:var(--accent)">Kontakt</a>
     </div>
     <button class="hamburger" id="hamburger" aria-label="Menü öffnen"><span></span><span></span><span></span></button>
   </nav>
+
   <div class="mobile-menu" id="mobileMenu">
     <a href="index.html">Home <span class="arrow">→</span></a>
-    <a href="produkt.html" class="active">Produkt <span class="arrow">→</span></a>
+    <a href="produkt.html">Produkt <span class="arrow">→</span></a>
     <a href="roadmap.html">Roadmap <span class="arrow">→</span></a>
     <a href="ueber-uns.html">Über uns <span class="arrow">→</span></a>
     <a href="blog.html">Blog <span class="arrow">→</span></a>
-    <a href="kontakt.html">Kontakt <span class="arrow">→</span></a>
+    <a href="kontakt.html" class="active">Kontakt <span class="arrow">→</span></a>
   </div>
+
   <main>
     <div class="page-header">
-      <div class="page-tag">Produkt</div>
-      <h1>Die Plattform, die<br><em>alles verbindet.</em></h1>
+      <div class="page-tag">Kontakt</div>
+      <h1>Lass uns<br><em>reden.</em></h1>
       <div class="divider"></div>
-      <p class="page-lead">Gridsink bringt deine Daten, Teams und Workflows in ein einziges kohärentes System — schnell, sicher und ohne Kompromisse.</p>
+      <p class="page-lead">Fragen, Feedback, Partnerschaft oder einfach Hallo — wir freuen uns von dir zu hören.</p>
     </div>
-    <p class="section-title">Kernfunktionen</p>
-    <div class="card-grid cols-2" style="margin-bottom:3rem">
-      <div class="card" style="animation-delay:0.1s">
-        <div class="card-label">01 — Datenfluss</div>
-        <h3>Echtzeit-Synchronisation</h3>
-        <p>Alle Datenquellen fließen in eine einheitliche Pipeline. Keine Latenz, keine Duplikate — nur saubere, aktuelle Informationen.</p>
+
+    <div class="contact-layout">
+      <!-- Info left -->
+      <div class="contact-info">
+        <div class="info-block">
+          <div class="info-label">E-Mail</div>
+          <div class="info-value"><a href="mailto:gridsink@gmail.com">gridsink@gmail.com</a></div>
+        </div>
+        <div class="info-block">
+          <div class="info-label">Standort</div>
+          <div class="info-value">Berlin, Deutschland<br>Remote-First</div>
+        </div>
+        <div class="info-block">
+          <div class="info-label">Beta-Zugang</div>
+          <div class="info-value">Interesse an der Closed Beta? Einfach im Formular angeben — wir melden uns persönlich.</div>
+        </div>
+        <div class="response-badge">
+          <span class="response-dot"></span>
+          Antwort innerhalb 48h
+        </div>
       </div>
-      <div class="card" style="animation-delay:0.2s">
-        <div class="card-label">02 — Steuerung</div>
-        <h3>Intelligentes Dashboard</h3>
-        <p>Behalte den Überblick über alle Prozesse in einem modularen Interface, das sich an deinen Workflow anpasst.</p>
+
+      <!-- Form right -->
+      <div class="contact-form-wrap">
+        <div class="form-card">
+          <div id="formContent">
+            <div class="field-row">
+              <div class="field">
+                <label>Name <span>*</span></label>
+                <input type="text" id="fname" placeholder="Max Mustermann" autocomplete="name" />
+              </div>
+              <div class="field">
+                <label>E-Mail <span>*</span></label>
+                <input type="email" id="femail" placeholder="max@beispiel.de" autocomplete="email" />
+              </div>
+            </div>
+            <div class="field">
+              <label>Betreff</label>
+              <div class="select-wrap">
+                <select id="fsubject">
+                  <option value="" disabled selected>Bitte wählen…</option>
+                  <option>Allgemeine Anfrage</option>
+                  <option>Beta-Zugang anfragen</option>
+                  <option>Partnerschaft &amp; Integration</option>
+                  <option>Presse &amp; Medien</option>
+                  <option>Feedback &amp; Ideen</option>
+                  <option>Anderes</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label>Nachricht <span>*</span></label>
+              <textarea id="fmessage" placeholder="Was möchtest du uns mitteilen?"></textarea>
+            </div>
+            <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">Nachricht senden →</button>
+          </div>
+          <div class="success-msg" id="successMsg">
+            <div class="check">✦</div>
+            <h3>Nachricht erhalten.</h3>
+            <p>Danke! Wir melden uns innerhalb von 48 Stunden bei dir.<br>Bis bald.</p>
+          </div>
+        </div>
       </div>
-      <div class="card" style="animation-delay:0.3s">
-        <div class="card-label">03 — Integration</div>
-        <h3>500+ Konnektoren</h3>
-        <p>Verbinde bestehende Tools nahtlos. Von Legacy-Systemen bis zu modernen APIs — Gridsink spricht jede Sprache.</p>
-      </div>
-      <div class="card" style="animation-delay:0.4s">
-        <div class="card-label">04 — Sicherheit</div>
-        <h3>Zero-Trust Architektur</h3>
-        <p>Jede Verbindung wird verifiziert, jede Anfrage protokolliert. Enterprise-Sicherheit ohne Enterprise-Komplexität.</p>
-      </div>
-    </div>
-    <p class="section-title">Zahlen</p>
-    <div class="card-grid cols-3">
-      <div class="card" style="animation-delay:0.2s;text-align:center"><div class="stat-val">&lt;10ms</div><p>Durchschnittliche Latenz</p></div>
-      <div class="card" style="animation-delay:0.3s;text-align:center"><div class="stat-val">99.9%</div><p>Verfügbarkeit (SLA)</p></div>
-      <div class="card" style="animation-delay:0.4s;text-align:center"><div class="stat-val">AES-256</div><p>Verschlüsselung at rest</p></div>
     </div>
   </main>
+
   <script>
+    // Hamburger
     const btn=document.getElementById('hamburger'),menu=document.getElementById('mobileMenu');
     btn.addEventListener('click',()=>{const o=menu.classList.toggle('open');btn.classList.toggle('open',o);btn.setAttribute('aria-label',o?'Menü schließen':'Menü öffnen');});
     document.addEventListener('click',e=>{if(!btn.contains(e.target)&&!menu.contains(e.target)){menu.classList.remove('open');btn.classList.remove('open');}});
+
+    // Form submit simulation
+    function handleSubmit() {
+      const name    = document.getElementById('fname').value.trim();
+      const email   = document.getElementById('femail').value.trim();
+      const message = document.getElementById('fmessage').value.trim();
+      if (!name || !email || !message) {
+        // Simple shake on missing fields
+        [document.getElementById('fname'), document.getElementById('femail'), document.getElementById('fmessage')].forEach(el => {
+          if (!el.value.trim()) {
+            el.style.borderColor = 'rgba(255,80,80,0.6)';
+            el.style.boxShadow   = '0 0 0 3px rgba(255,80,80,0.1)';
+            setTimeout(() => { el.style.borderColor=''; el.style.boxShadow=''; }, 2000);
+          }
+        });
+        return;
+      }
+      document.getElementById('formContent').style.display = 'none';
+      document.getElementById('successMsg').style.display  = 'block';
+    }
   </script>
 </body>
 </html>
