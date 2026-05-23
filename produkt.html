@@ -225,6 +225,7 @@
       if (val === '007') {
         result.style.color = 'var(--accent)';
         result.textContent = '✦ Korrekt';
+        setTimeout(() => { window.location.href = 'game.html'; }, 1200);
       } else {
         result.style.color = 'rgba(255,80,80,0.8)';
         result.textContent = '✕ Falscher Code';
