@@ -1,115 +1,69 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>??? — Gridsink</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --bg:#08090d; --grid:rgba(255,255,255,0.04); --accent:#00ffc3; --accent2:#0066ff; --text:#e8eaf0; --muted:rgba(232,234,240,0.4); }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#08090d;--grid:rgba(255,255,255,0.04);--accent:#00ffc3;--accent2:#0066ff;--text:#e8eaf0;--muted:rgba(232,234,240,0.4)}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+    .grid-bg{position:fixed;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:48px 48px;animation:gridShift 20s linear infinite;z-index:0}
+    @keyframes gridShift{0%{background-position:0 0}100%{background-position:48px 48px}}
+    .blob{position:fixed;border-radius:50%;filter:blur(120px);opacity:0.15;pointer-events:none;z-index:0}
+    .blob-1{width:600px;height:600px;background:var(--accent2);top:-150px;left:-150px;animation:blobFloat 12s ease-in-out infinite alternate}
+    .blob-2{width:500px;height:500px;background:var(--accent);bottom:-100px;right:-100px;animation:blobFloat 16s ease-in-out infinite alternate-reverse}
+    @keyframes blobFloat{0%{transform:translate(0,0) scale(1)}100%{transform:translate(40px,30px) scale(1.08)}}
+    body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);pointer-events:none;z-index:100}
+    .corner{position:fixed;width:32px;height:32px;opacity:0.3;z-index:5}
+    .corner::before,.corner::after{content:'';position:absolute;background:var(--accent)}
+    .corner::before{width:2px;height:100%}
+    .corner::after{width:100%;height:2px}
+    .corner-tl{top:20px;left:20px}
+    .corner-tr{top:20px;right:20px;transform:scaleX(-1)}
+    .corner-bl{bottom:24px;left:24px;transform:scaleY(-1)}
+    .corner-br{bottom:24px;right:24px;transform:scale(-1)}
+    .back{position:fixed;top:20px;left:20px;z-index:20;font-family:'Space Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:10px;padding:8px 16px;border:1px solid rgba(255,255,255,0.12);border-radius:6px;background:rgba(8,9,13,0.6);backdrop-filter:blur(10px);transition:color 0.2s,border-color 0.2s,background 0.2s}
+    .back:hover{color:var(--accent);border-color:rgba(0,255,195,0.4);background:rgba(0,255,195,0.06)}
 
-    body {
-      background:var(--bg); color:var(--text); font-family:'Syne',sans-serif;
-      min-height:100vh; display:flex; flex-direction:column;
-      align-items:center; justify-content:center;
-      position:relative; overflow:hidden;
-    }
+    .game-wrapper{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.5rem;animation:fadeDown 0.8s cubic-bezier(0.16,1,0.3,1) both}
+    .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,255,195,0.07);border:1px solid rgba(0,255,195,0.25);border-radius:99px;padding:5px 14px;font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.12em;color:var(--accent);text-transform:uppercase}
+    .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:blink 1.4s ease-in-out infinite}
 
-    .grid-bg { position:fixed; inset:0; background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px); background-size:48px 48px; animation:gridShift 20s linear infinite; z-index:0; }
-    @keyframes gridShift { 0%{background-position:0 0} 100%{background-position:48px 48px} }
-    .blob { position:fixed; border-radius:50%; filter:blur(120px); opacity:0.15; pointer-events:none; z-index:0; }
-    .blob-1 { width:600px; height:600px; background:var(--accent2); top:-150px; left:-150px; animation:blobFloat 12s ease-in-out infinite alternate; }
-    .blob-2 { width:500px; height:500px; background:var(--accent); bottom:-100px; right:-100px; animation:blobFloat 16s ease-in-out infinite alternate-reverse; }
-    @keyframes blobFloat { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(40px,30px) scale(1.08)} }
-    body::after { content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px); pointer-events:none; z-index:100; }
+    .hud{width:min(700px,calc(100vw - 3rem));display:flex;justify-content:space-between;align-items:center;font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+    .hud-right{display:flex;align-items:center;gap:1rem}
+    .hud-val{color:var(--accent);font-size:0.8rem}
 
-    .corner { position:fixed; width:32px; height:32px; opacity:0.3; z-index:5; }
-    .corner::before,.corner::after { content:''; position:absolute; background:var(--accent); }
-    .corner::before { width:2px; height:100%; }
-    .corner::after  { width:100%; height:2px; }
-    .corner-tl { top:20px; left:20px; }
-    .corner-tr { top:20px; right:20px; transform:scaleX(-1); }
-    .corner-bl { bottom:24px; left:24px; transform:scaleY(-1); }
-    .corner-br { bottom:24px; right:24px; transform:scale(-1); }
+    /* Pause button */
+    #pause-btn{background:none;border:1px solid rgba(255,255,255,0.1);border-radius:5px;color:var(--muted);font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;cursor:pointer;transition:border-color 0.2s,color 0.2s;display:none}
+    #pause-btn:hover{border-color:rgba(0,255,195,0.4);color:var(--accent)}
+    #pause-btn.visible{display:inline-block}
 
-    .back {
-      position:fixed; top:24px; left:24px; z-index:20;
-      font-family:'Space Mono',monospace; font-size:0.62rem;
-      letter-spacing:0.1em; text-transform:uppercase;
-      color:var(--muted); text-decoration:none;
-      display:flex; align-items:center; gap:8px; transition:color 0.2s;
-    }
-    .back:hover { color:var(--accent); }
+    .canvas-wrap{position:relative;width:min(700px,calc(100vw - 3rem))}
+    canvas{width:100%;height:auto;display:block;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:8px;cursor:pointer}
 
-    /* WRAPPER */
-    .game-wrapper {
-      position:relative; z-index:10;
-      display:flex; flex-direction:column; align-items:center;
-      gap:1.2rem; padding:1.5rem;
-      animation:fadeDown 0.8s cubic-bezier(0.16,1,0.3,1) both;
-    }
+    /* Overlay */
+    #overlay{position:absolute;inset:0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;background:rgba(8,9,13,0.75);backdrop-filter:blur(6px)}
+    #overlay h2{font-size:1.8rem;font-weight:800;letter-spacing:-0.02em}
+    #overlay h2 em{font-style:normal;color:var(--accent)}
+    #overlay .sub{font-family:'Space Mono',monospace;font-size:0.63rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
+    #overlay .score-line{font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text)}
+    #overlay.hidden{display:none}
 
-    .badge {
-      display:inline-flex; align-items:center; gap:8px;
-      background:rgba(0,255,195,0.07); border:1px solid rgba(0,255,195,0.25);
-      border-radius:99px; padding:5px 14px;
-      font-family:'Space Mono',monospace; font-size:0.65rem;
-      letter-spacing:0.12em; color:var(--accent); text-transform:uppercase;
-    }
-    .badge-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); animation:blink 1.4s ease-in-out infinite; }
+    /* Big pause icon overlay */
+    #pause-overlay{position:absolute;inset:0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.6rem;background:rgba(8,9,13,0.6);backdrop-filter:blur(8px);pointer-events:none;opacity:0;transition:opacity 0.25s}
+    #pause-overlay.show{opacity:1}
+    .pause-icon{display:flex;gap:8px;margin-bottom:0.2rem}
+    .pause-bar{width:14px;height:48px;border-radius:4px;background:var(--accent)}
+    #pause-overlay p{font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)}
 
-    /* HUD */
-    .hud {
-      width:700px; max-width:calc(100vw - 3rem);
-      display:flex; justify-content:space-between; align-items:center;
-      font-family:'Space Mono',monospace; font-size:0.65rem;
-      letter-spacing:0.1em; text-transform:uppercase; color:var(--muted);
-    }
-    .hud-val { color:var(--accent); font-size:0.8rem; }
+    .hint{font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-align:center;line-height:1.9}
+    .hint span{color:var(--accent)}
 
-    /* CANVAS */
-    canvas {
-      width:700px; max-width:calc(100vw - 3rem);
-      height:180px;
-      background:rgba(255,255,255,0.02);
-      border:1px solid rgba(255,255,255,0.08);
-      border-radius:8px;
-      display:block;
-      image-rendering:pixelated;
-    }
-
-    /* HINT */
-    .hint {
-      font-family:'Space Mono',monospace; font-size:0.62rem;
-      letter-spacing:0.1em; text-transform:uppercase;
-      color:var(--muted); text-align:center; line-height:1.8;
-    }
-    .hint span { color:var(--accent); }
-
-    /* OVERLAY */
-    #overlay {
-      position:absolute; inset:0; border-radius:8px;
-      display:flex; flex-direction:column;
-      align-items:center; justify-content:center; gap:0.6rem;
-      background:rgba(8,9,13,0.7); backdrop-filter:blur(4px);
-      pointer-events:none;
-    }
-    #overlay h2 {
-      font-size:1.6rem; font-weight:800; letter-spacing:-0.01em;
-    }
-    #overlay h2 em { font-style:normal; color:var(--accent); }
-    #overlay p {
-      font-family:'Space Mono',monospace; font-size:0.65rem;
-      letter-spacing:0.12em; text-transform:uppercase; color:var(--muted);
-    }
-    #overlay.hidden { display:none; }
-
-    .canvas-wrap { position:relative; width:700px; max-width:calc(100vw - 3rem); }
-
-    @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+    @keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
   </style>
 </head>
 <body>
@@ -118,358 +72,381 @@
   <div class="blob blob-2"></div>
   <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
   <div class="corner corner-bl"></div><div class="corner corner-br"></div>
-
   <a class="back" href="produkt.html">← Zurück</a>
 
   <div class="game-wrapper">
     <div class="badge"><span class="badge-dot"></span>Geheimer Bereich</div>
 
     <div class="hud">
-      <span>Score <span class="hud-val" id="score-display">00000</span></span>
-      <span>Hi <span class="hud-val" id="hi-display">00000</span></span>
+      <span>Score <span class="hud-val" id="score-el">00000</span></span>
+      <div class="hud-right">
+        <span>Hi <span class="hud-val" id="hi-el">00000</span></span>
+        <button id="pause-btn" onclick="togglePause()">❙❙ Pause</button>
+      </div>
     </div>
 
     <div class="canvas-wrap">
       <canvas id="c"></canvas>
       <div id="overlay">
         <h2>Drück <em>Space</em></h2>
-        <p>oder Tippen zum Starten</p>
+        <div class="sub">oder Canvas antippen</div>
+      </div>
+      <div id="pause-overlay">
+        <div class="pause-icon"><div class="pause-bar"></div><div class="pause-bar"></div></div>
+        <p>Pausiert — Space zum Weiterspielen</p>
       </div>
     </div>
 
     <p class="hint">
-      <span>Space / ↑ / Tap</span> — Springen &nbsp;·&nbsp; <span>↓</span> — Ducken
+      <span>Space / ↑ / Tap</span> Springen &nbsp;·&nbsp;
+      <span>↓</span> Ducken &nbsp;·&nbsp;
+      <span>P</span> Pause
     </p>
   </div>
 
 <script>
-const canvas  = document.getElementById('c');
-const ctx     = canvas.getContext('2d');
-const overlay = document.getElementById('overlay');
-const scoreEl = document.getElementById('score-display');
-const hiEl    = document.getElementById('hi-display');
+// ── Canvas setup ─────────────────────────────────────────────────
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d');
 
-// ── Retina / sizing ─────────────────────────────────────────────
-const W = 700, H = 180;
-canvas.width  = W;
-canvas.height = H;
+// Internal resolution
+const IW = 700, IH = 200;
+canvas.width  = IW;
+canvas.height = IH;
 
-// ── Colours ─────────────────────────────────────────────────────
-const C = {
-  accent  : '#00ffc3',
-  accent2 : '#0066ff',
-  muted   : 'rgba(232,234,240,0.25)',
-  text    : '#e8eaf0',
-  ground  : 'rgba(232,234,240,0.15)',
-};
+const GROUND = IH - 36;
 
-// ── Ground ───────────────────────────────────────────────────────
-const GROUND = H - 30;
+// ── Elements ──────────────────────────────────────────────────────
+const overlay      = document.getElementById('overlay');
+const pauseOverlay = document.getElementById('pause-overlay');
+const pauseBtn     = document.getElementById('pause-btn');
+const scoreEl      = document.getElementById('score-el');
+const hiEl         = document.getElementById('hi-el');
 
-// ── Game state ───────────────────────────────────────────────────
-let state      = 'idle';   // idle | running | dead
-let score      = 0;
-let hi         = 0;
-let speed      = 5;
-let frameCount = 0;
-let raf;
+// ── Colours ───────────────────────────────────────────────────────
+const A  = '#00ffc3';
+const A2 = '#0066ff';
+const GR = 'rgba(232,234,240,0.18)';
 
-// ── Dino ────────────────────────────────────────────────────────
-const dino = {
-  x: 60, y: GROUND,
-  w: 40, h: 48,
-  vy: 0,
-  ducking: false,
-  duckH: 28,
-  onGround: true,
-  legFrame: 0,
-  legTimer: 0,
-};
+// ── State ─────────────────────────────────────────────────────────
+// 'idle' | 'running' | 'paused' | 'dead'
+let state = 'idle';
+let score = 0, hi = 0, speed = 5.5;
 
-function dinoJump() {
-  if (dino.onGround) {
-    dino.vy   = -13;
-    dino.onGround = false;
-  }
+// ── Dino ──────────────────────────────────────────────────────────
+const dino = { x:70, y:GROUND, vy:0, onGround:true, ducking:false, legF:0, legT:0 };
+const DINO_W=38, DINO_H=46, DUCK_H=26;
+const JUMP_VY = -14;
+const GRAVITY  = 0.75;
+
+function jump() {
+  if (!dino.onGround) return;
+  dino.vy = JUMP_VY;
+  dino.onGround = false;
 }
-function dinoDuck(on) {
-  dino.ducking = on;
-}
+function duck(on) { dino.ducking = on; }
 
-// ── Obstacles ────────────────────────────────────────────────────
-let obstacles = [];
-let obstTimer = 0;
-let obstInterval = 90;
+// ── Obstacles ─────────────────────────────────────────────────────
+let obs=[], obsTimer=0, obsInterval=95;
 
-function spawnObstacle() {
-  const type = Math.random() < 0.25 && score > 300 ? 'bird' : 'cactus';
-  if (type === 'cactus') {
-    const variant = Math.floor(Math.random() * 3);
-    const w = [22, 38, 54][variant];
-    obstacles.push({ type:'cactus', x:W+10, y:GROUND, w, h:[48,52,48][variant] });
+function spawnObs() {
+  const r = Math.random();
+  if (r < 0.25 && score > 250) {
+    const birdH = 22;
+    // Blue bird: bottom sits exactly at duck-top → standing/running dino hits it, jump clears it, duck clears it
+    const lowY = GROUND - DUCK_H - birdH;
+    obs.push({type:'bird', x:IW+10, y:lowY, w:38, h:birdH, wf:0, wt:0, high:false});
+  } else if (r < 0.42 && score > 450) {
+    // Red wall: full-height barrier with a duck-only gap at the bottom.
+    // Standing or jumping dino hits the wall; ducking dino fits through the gap.
+    const gapH = DUCK_H + 2;
+    obs.push({type:'wall', x:IW+10, y:0, w:28, h:GROUND - gapH});
+  } else if (r < 0.42 && score > 400) {
+    // Tunnel: low ceiling bar — only ducking clears it, jumping hits the roof
+    const gapH = DUCK_H + 4;
+    obs.push({type:'tunnel', x:IW+10, y:0, w:100, h:GROUND - gapH});
   } else {
-    const birdY = GROUND - [0, 30, 60][Math.floor(Math.random()*3)];
-    obstacles.push({ type:'bird', x:W+10, y:birdY - 20, w:36, h:22, frame:0, ft:0 });
+    const v = Math.floor(Math.random()*3);
+    obs.push({type:'cactus', x:IW+10, y:GROUND, w:[40,56,48][v], h:[50,46,52][v]});
   }
 }
 
 // ── Clouds ────────────────────────────────────────────────────────
-let clouds = [];
-let cloudTimer = 0;
-function spawnCloud() {
-  clouds.push({ x:W+10, y:20 + Math.random()*40, w:60+Math.random()*40, h:14+Math.random()*10 });
-}
+let clouds=[], cloudT=0;
 
-// ── Stars (decorative scrolling dots) ────────────────────────────
-const stars = Array.from({length:30}, () => ({
-  x: Math.random()*W, y: Math.random()*(GROUND-20),
-  r: Math.random()*1.2+0.3, sp: Math.random()*0.4+0.1
+// ── Pebbles ───────────────────────────────────────────────────────
+const pebbles = Array.from({length:14},()=>({
+  x:Math.random()*IW, y:GROUND+6+Math.random()*8,
+  rx:2+Math.random()*4, ry:1+Math.random()*2
 }));
 
-// ── Ground pebbles ────────────────────────────────────────────────
-let pebbles = Array.from({length:12}, () => ({
-  x: Math.random()*W, y: GROUND + 8 + Math.random()*8,
-  w: 2 + Math.random()*4, h: 1 + Math.random()*2
+// ── Stars ─────────────────────────────────────────────────────────
+const stars = Array.from({length:28},()=>({
+  x:Math.random()*IW, y:10+Math.random()*(GROUND-20),
+  r:0.4+Math.random()*1.1, sp:0.08+Math.random()*0.35
 }));
 
-// ── Draw helpers ─────────────────────────────────────────────────
+// ── Draw ──────────────────────────────────────────────────────────
 function drawDino() {
+  ctx.fillStyle = A;
   const x = dino.x;
-  const h = dino.ducking ? dino.duckH : dino.h;
-  const y = dino.ducking ? GROUND - dino.duckH + dino.h : GROUND;
-  const top = y - h;
-
-  ctx.fillStyle = C.accent;
 
   if (dino.ducking) {
-    // ducked body
-    ctx.beginPath();
-    ctx.roundRect(x, top, dino.w + 14, h, 4);
-    ctx.fill();
+    const top = GROUND - DUCK_H;
+    ctx.beginPath(); ctx.roundRect(x, top, DINO_W+16, DUCK_H, 5); ctx.fill();
     // eye
-    ctx.fillStyle = C.accent2;
-    ctx.beginPath(); ctx.arc(x + dino.w + 10, top + 8, 4, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = '#fff';
-    ctx.beginPath(); ctx.arc(x + dino.w + 11, top + 7, 1.5, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle=A2; ctx.beginPath(); ctx.arc(x+DINO_W+11,top+9,4,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(x+DINO_W+12,top+8,1.6,0,Math.PI*2); ctx.fill();
     return;
   }
 
+  const top = dino.y - DINO_H;
+  ctx.fillStyle = A;
   // body
-  ctx.beginPath();
-  ctx.roundRect(x + 4, top + 12, dino.w - 6, h - 20, 4);
-  ctx.fill();
-
+  ctx.beginPath(); ctx.roundRect(x+2, top+14, DINO_W-6, DINO_H-22, 4); ctx.fill();
   // head
-  ctx.beginPath();
-  ctx.roundRect(x + 10, top, dino.w - 4, 22, 4);
-  ctx.fill();
-
+  ctx.beginPath(); ctx.roundRect(x+8, top, DINO_W-6, 22, 5); ctx.fill();
   // snout
-  ctx.beginPath();
-  ctx.roundRect(x + dino.w + 2, top + 4, 10, 14, 3);
-  ctx.fill();
-
-  // eye
-  ctx.fillStyle = C.accent2;
-  ctx.beginPath(); ctx.arc(x + dino.w - 1, top + 8, 4.5, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = '#fff';
-  ctx.beginPath(); ctx.arc(x + dino.w, top + 7, 1.8, 0, Math.PI*2); ctx.fill();
-
-  ctx.fillStyle = C.accent;
-
+  ctx.beginPath(); ctx.roundRect(x+DINO_W+1, top+5, 10, 13, 3); ctx.fill();
   // tail
   ctx.beginPath();
-  ctx.moveTo(x + 4, top + 28);
-  ctx.lineTo(x - 8, top + 36);
-  ctx.lineTo(x - 4, top + 40);
-  ctx.lineTo(x + 8, top + 32);
+  ctx.moveTo(x+3,top+30); ctx.lineTo(x-9,top+38); ctx.lineTo(x-4,top+42); ctx.lineTo(x+8,top+34);
   ctx.fill();
-
+  // eye
+  ctx.fillStyle=A2; ctx.beginPath(); ctx.arc(x+DINO_W-1,top+9,4.5,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(x+DINO_W,top+8,1.8,0,Math.PI*2); ctx.fill();
   // legs
-  const leg = dino.onGround ? dino.legFrame : 0;
-  const legW = 8, legH = 18;
-  // left leg
-  ctx.beginPath();
-  ctx.roundRect(x + 8, top + h - 20, legW, legH + (leg===0?2:-2), 3);
-  ctx.fill();
-  // right leg
-  ctx.beginPath();
-  ctx.roundRect(x + 20, top + h - 20, legW, legH + (leg===1?2:-2), 3);
-  ctx.fill();
+  ctx.fillStyle=A;
+  const lf = dino.onGround ? dino.legF : 0;
+  ctx.beginPath(); ctx.roundRect(x+7, top+DINO_H-20, 8, 18+(lf===0?2:-2), 3); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(x+20, top+DINO_H-20, 8, 18+(lf===1?2:-2), 3); ctx.fill();
 }
 
 function drawCactus(o) {
-  ctx.fillStyle = C.accent;
+  ctx.fillStyle = A;
   const base = o.y - o.h;
-  // main stem
-  ctx.beginPath(); ctx.roundRect(o.x + o.w/2 - 7, base, 14, o.h, 3); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(o.x+o.w/2-7, base, 14, o.h, 3); ctx.fill();
   if (o.w > 22) {
-    // arms
-    ctx.beginPath(); ctx.roundRect(o.x, base + 14, o.w/2 - 4, 9, 2); ctx.fill();
-    ctx.beginPath(); ctx.roundRect(o.x, base + 8, 9, 16, 2); ctx.fill();
-    ctx.beginPath(); ctx.roundRect(o.x + o.w/2 + 4, base + 20, o.w/2 - 4, 9, 2); ctx.fill();
-    ctx.beginPath(); ctx.roundRect(o.x + o.w - 9, base + 14, 9, 16, 2); ctx.fill();
+    ctx.beginPath(); ctx.roundRect(o.x,           base+13, o.w/2-4,  9, 2); ctx.fill();
+    ctx.beginPath(); ctx.roundRect(o.x,           base+7,  9,       17, 2); ctx.fill();
+    ctx.beginPath(); ctx.roundRect(o.x+o.w/2+4,  base+19, o.w/2-4,  9, 2); ctx.fill();
+    ctx.beginPath(); ctx.roundRect(o.x+o.w-9,    base+13, 9,       17, 2); ctx.fill();
   }
 }
 
 function drawBird(o) {
-  ctx.fillStyle = C.accent2;
-  const wingOff = o.frame === 0 ? -5 : 5;
-  // body
-  ctx.beginPath(); ctx.ellipse(o.x + o.w/2, o.y + o.h/2, 14, 8, 0, 0, Math.PI*2); ctx.fill();
-  // wings
-  ctx.beginPath();
-  ctx.moveTo(o.x + 4, o.y + o.h/2);
-  ctx.lineTo(o.x - 8, o.y + o.h/2 + wingOff);
-  ctx.lineTo(o.x + 14, o.y + o.h/2 - 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(o.x + o.w - 4, o.y + o.h/2);
-  ctx.lineTo(o.x + o.w + 8, o.y + o.h/2 + wingOff);
-  ctx.lineTo(o.x + o.w - 14, o.y + o.h/2 - 2);
-  ctx.fill();
-  // beak
-  ctx.fillStyle = C.accent;
-  ctx.beginPath(); ctx.moveTo(o.x + o.w/2 + 12, o.y + o.h/2 - 2); ctx.lineTo(o.x + o.w/2 + 20, o.y + o.h/2); ctx.lineTo(o.x + o.w/2 + 12, o.y + o.h/2 + 4); ctx.fill();
+  // High bird (duck-only) is red-tinted to signal danger
+  const bodyCol = o.high ? '#ff5566' : A2;
+  const beakCol = o.high ? '#ff8844' : A;
+  ctx.fillStyle = bodyCol;
+  const wo = o.wf===0 ? -6 : 6;
+  ctx.beginPath(); ctx.ellipse(o.x+o.w/2, o.y+o.h/2, 14, 8, 0, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(o.x+4,o.y+o.h/2); ctx.lineTo(o.x-10,o.y+o.h/2+wo); ctx.lineTo(o.x+14,o.y+o.h/2-2); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(o.x+o.w-4,o.y+o.h/2); ctx.lineTo(o.x+o.w+10,o.y+o.h/2+wo); ctx.lineTo(o.x+o.w-14,o.y+o.h/2-2); ctx.fill();
+  ctx.fillStyle=beakCol;
+  ctx.beginPath(); ctx.moveTo(o.x+o.w/2+12,o.y+o.h/2-2); ctx.lineTo(o.x+o.w/2+21,o.y+o.h/2); ctx.lineTo(o.x+o.w/2+12,o.y+o.h/2+4); ctx.fill();
+}
+
+function drawTunnel(o) {
+  const grad = ctx.createLinearGradient(o.x, 0, o.x+o.w, 0);
+  grad.addColorStop(0,   'rgba(0,102,255,0.0)');
+  grad.addColorStop(0.08,'rgba(0,102,255,0.9)');
+  grad.addColorStop(0.92,'rgba(0,102,255,0.9)');
+  grad.addColorStop(1,   'rgba(0,102,255,0.0)');
+  ctx.fillStyle = grad;
+  ctx.beginPath(); ctx.roundRect(o.x, o.y, o.w, o.h, [0,0,6,6]); ctx.fill();
+  ctx.strokeStyle = A2; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(o.x+8, o.y+o.h); ctx.lineTo(o.x+o.w-8, o.y+o.h); ctx.stroke();
+  ctx.fillStyle = 'rgba(0,255,195,0.22)';
+  for (let i=0; i<3; i++) {
+    const cx = o.x + o.w/2 + (i-1)*22;
+    const cy = o.y + o.h - 10;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy-5); ctx.lineTo(cx+7, cy+5); ctx.lineTo(cx-7, cy+5);
+    ctx.closePath(); ctx.fill();
+  }
+}
+
+function drawWall(o) {
+  // Tall wall with duck gap at bottom — red tinted
+  const grad = ctx.createLinearGradient(o.x, 0, o.x+o.w, 0);
+  grad.addColorStop(0,   'rgba(255,60,80,0.0)');
+  grad.addColorStop(0.15,'rgba(255,60,80,0.85)');
+  grad.addColorStop(0.85,'rgba(255,60,80,0.85)');
+  grad.addColorStop(1,   'rgba(255,60,80,0.0)');
+  ctx.fillStyle = grad;
+  ctx.beginPath(); ctx.roundRect(o.x, o.y, o.w, o.h, [0,0,4,4]); ctx.fill();
+  // bottom edge glow
+  ctx.strokeStyle = '#ff3c50';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(o.x+4, o.y+o.h); ctx.lineTo(o.x+o.w-4, o.y+o.h); ctx.stroke();
+  // warning chevrons
+  ctx.fillStyle = 'rgba(255,180,0,0.35)';
+  for (let i=0; i<2; i++) {
+    const cx = o.x + o.w/2 + (i===0 ? -8 : 8);
+    const cy = o.y + o.h/2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy-6); ctx.lineTo(cx+6, cy+6); ctx.lineTo(cx-6, cy+6);
+    ctx.closePath(); ctx.fill();
+  }
 }
 
 function drawGround() {
-  ctx.strokeStyle = C.ground;
-  ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(0, GROUND + 2); ctx.lineTo(W, GROUND + 2); ctx.stroke();
-
-  ctx.fillStyle = C.ground;
-  pebbles.forEach(p => {
-    ctx.beginPath(); ctx.ellipse(p.x, p.y, p.w, p.h, 0, 0, Math.PI*2); ctx.fill();
-  });
+  ctx.strokeStyle=GR; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(0,GROUND+2); ctx.lineTo(IW,GROUND+2); ctx.stroke();
+  ctx.fillStyle=GR;
+  pebbles.forEach(p=>{ctx.beginPath();ctx.ellipse(p.x,p.y,p.rx,p.ry,0,0,Math.PI*2);ctx.fill();});
 }
 
-function fmt(n) { return String(Math.floor(n)).padStart(5,'0'); }
+function fmt(n){return String(Math.floor(n)).padStart(5,'0')}
 
-// ── Collision ────────────────────────────────────────────────────
-function hitTest(o) {
-  const margin = 6;
-  const dh = dino.ducking ? dino.duckH : dino.h;
-  const dy = (dino.ducking ? GROUND - dino.duckH + dino.h : GROUND) - dh;
-  const dx = dino.x + margin;
-  const dw = (dino.ducking ? dino.w + 14 : dino.w) - margin*2;
-
-  const ox = o.x + margin;
-  const ow = o.w - margin*2;
-  const oy = o.y - o.h + margin;
-  const oh = o.h - margin*2;
-
-  return dx < ox + ow && dx + dw > ox && dy < oy + oh && dy + dh > oy;
+// ── Collision ─────────────────────────────────────────────────────
+function hits(o) {
+  const m=7;
+  const dh   = dino.ducking ? DUCK_H : DINO_H;
+  const dtop = dino.ducking ? GROUND-DUCK_H : dino.y-DINO_H;
+  const dl=dino.x+m, dr=dino.x+(dino.ducking?DINO_W+16:DINO_W)-m;
+  const dt=dtop+m,   db=dtop+dh-m;
+  const ol=o.x+m, or_=o.x+o.w-m;
+  let ot, ob_;
+  if (o.type==='bird')   { ot=o.y+m;       ob_=o.y+o.h-m; }
+  else if (o.type==='tunnel'||o.type==='wall') { ot=o.y; ob_=o.y+o.h-m; }
+  else                   { ot=o.y-o.h+m;   ob_=o.y-m; }      // cactus from ground
+  return dl<or_ && dr>ol && dt<ob_ && db>ot;
 }
 
-// ── Main loop ────────────────────────────────────────────────────
+// ── Loop ──────────────────────────────────────────────────────────
 function loop() {
-  raf = requestAnimationFrame(loop);
-  ctx.clearRect(0, 0, W, H);
+  requestAnimationFrame(loop);
+  ctx.clearRect(0,0,IW,IH);
 
   // stars
-  ctx.fillStyle = 'rgba(232,234,240,0.15)';
-  stars.forEach(s => {
-    if (state === 'running') s.x -= s.sp;
-    if (s.x < 0) s.x = W;
-    ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle='rgba(232,234,240,0.14)';
+  stars.forEach(s=>{
+    if(state==='running') s.x-=s.sp;
+    if(s.x<0) s.x=IW;
+    ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fill();
   });
 
-  if (state !== 'running') {
-    drawGround();
-    drawDino();
-    return;
+  if(state!=='running'){
+    drawGround(); drawDino(); return;
   }
 
-  frameCount++;
-  score += speed / 10;
-  speed = 5 + Math.floor(score / 200) * 0.6;
-  if (score > hi) hi = score;
-  scoreEl.textContent = fmt(score);
-  hiEl.textContent    = fmt(hi);
+  // score / speed
+  score += speed/10;
+  speed  = 5.5 + Math.floor(score/150)*0.5;
+  if(score>hi){hi=score;}
+  scoreEl.textContent=fmt(score);
+  hiEl.textContent=fmt(hi);
 
   // clouds
-  cloudTimer++;
-  if (cloudTimer > 120 - Math.floor(speed)) { spawnCloud(); cloudTimer = 0; }
-  clouds.forEach(c => { c.x -= speed * 0.3; });
-  clouds = clouds.filter(c => c.x + c.w > 0);
-  ctx.fillStyle = 'rgba(232,234,240,0.06)';
-  clouds.forEach(c => { ctx.beginPath(); ctx.ellipse(c.x + c.w/2, c.y, c.w/2, c.h/2, 0, 0, Math.PI*2); ctx.fill(); });
+  cloudT++;
+  if(cloudT>110){clouds.push({x:IW+10,y:15+Math.random()*35,w:55+Math.random()*45,h:12+Math.random()*10});cloudT=0;}
+  clouds.forEach(c=>c.x-=speed*0.28);
+  clouds=clouds.filter(c=>c.x+c.w>0);
+  ctx.fillStyle='rgba(232,234,240,0.055)';
+  clouds.forEach(c=>{ctx.beginPath();ctx.ellipse(c.x+c.w/2,c.y,c.w/2,c.h/2,0,0,Math.PI*2);ctx.fill();});
 
   // pebbles
-  pebbles.forEach(p => { p.x -= speed * 0.8; if (p.x < -10) p.x = W + 10; });
+  pebbles.forEach(p=>{p.x-=speed*0.7; if(p.x<-10) p.x=IW+10;});
 
   // obstacles
-  obstTimer++;
-  if (obstTimer > obstInterval) {
-    spawnObstacle();
-    obstTimer = 0;
-    obstInterval = 60 + Math.random() * 60 - Math.min(20, Math.floor(score/300));
+  obsTimer++;
+  if(obsTimer>=obsInterval){
+    spawnObs(); obsTimer=0;
+    obsInterval=Math.max(45, 90+Math.random()*55-Math.floor(score/300)*5);
   }
-  obstacles.forEach(o => {
-    o.x -= speed;
-    if (o.type === 'bird') { o.ft++; if(o.ft>10){o.frame^=1;o.ft=0;} }
+  obs.forEach(o=>{
+    o.x-=speed;
+    if(o.type==='bird'){o.wt++; if(o.wt>9){o.wf^=1;o.wt=0;}}
   });
-  obstacles = obstacles.filter(o => o.x + o.w > 0);
+  obs=obs.filter(o=>o.x+o.w>0);
 
-  // dino physics
-  dino.vy += 0.7;
-  dino.y += dino.vy;
-  if (dino.y >= GROUND) { dino.y = GROUND; dino.vy = 0; dino.onGround = true; }
+  // physics
+  dino.vy+=GRAVITY;
+  dino.y+=dino.vy;
+  if(dino.y>=GROUND){dino.y=GROUND;dino.vy=0;dino.onGround=true;}
 
-  // leg animation
-  if (dino.onGround && !dino.ducking) {
-    dino.legTimer++;
-    if (dino.legTimer > Math.max(3, 8 - Math.floor(speed))) { dino.legFrame ^= 1; dino.legTimer = 0; }
+  // leg anim
+  if(dino.onGround&&!dino.ducking){
+    dino.legT++;
+    if(dino.legT>Math.max(3,9-Math.floor(speed))){dino.legF^=1;dino.legT=0;}
   }
 
   drawGround();
-
-  // draw obstacles
-  obstacles.forEach(o => {
-    if (o.type === 'cactus') drawCactus(o);
-    else drawBird(o);
-    if (hitTest(o)) die();
+  obs.forEach(o=>{
+    if(o.type==='cactus') drawCactus(o); else if(o.type==='bird') drawBird(o); else if(o.type==='tunnel') drawTunnel(o); else drawWall(o);
+    if(hits(o)) die();
   });
-
   drawDino();
 }
 
-function die() {
-  state = 'dead';
-  // flash dino red
-  ctx.fillStyle = 'rgba(255,60,60,0.3)';
-  ctx.fillRect(0, 0, W, H);
-  overlay.innerHTML = `
+// ── Die ───────────────────────────────────────────────────────────
+function die(){
+  if(state==='dead') return;
+  state='dead';
+  pauseBtn.classList.remove('visible');
+  pauseOverlay.classList.remove('show');
+  overlay.innerHTML=`
     <h2 style="color:#e8eaf0">Game <em>Over</em></h2>
-    <p style="margin-bottom:0.3rem">Score: ${fmt(score)}</p>
-    <p>Space / Tap zum Neustart</p>`;
+    <div class="score-line" style="font-family:'Space Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;color:var(--text);margin:0.1rem 0">Score: ${fmt(score)}</div>
+    <div class="sub">Space / Tap zum Neustart</div>`;
   overlay.classList.remove('hidden');
 }
 
-function startOrRestart() {
-  if (state === 'idle' || state === 'dead') {
-    score = 0; speed = 5; frameCount = 0;
-    obstacles = []; clouds = []; obstTimer = 0; obstInterval = 90;
-    dino.y = GROUND; dino.vy = 0; dino.onGround = true; dino.ducking = false; dino.legFrame = 0;
-    scoreEl.textContent = '00000';
-    state = 'running';
-    overlay.classList.add('hidden');
+// ── Start / Restart ───────────────────────────────────────────────
+function startGame(){
+  if(state==='running'||state==='paused') return;
+  score=0; speed=5.5; obs=[]; clouds=[]; obsTimer=0; obsInterval=95;
+  dino.y=GROUND; dino.vy=0; dino.onGround=true; dino.ducking=false; dino.legF=0; dino.legT=0;
+  scoreEl.textContent='00000';
+  state='running';
+  overlay.classList.add('hidden');
+  pauseOverlay.classList.remove('show');
+  pauseBtn.classList.add('visible');
+  pauseBtn.textContent='❙❙ Pause';
+}
+
+// ── Pause ─────────────────────────────────────────────────────────
+function togglePause(){
+  if(state==='running'){
+    state='paused';
+    pauseBtn.textContent='▶ Weiter';
+    pauseOverlay.classList.add('show');
+  } else if(state==='paused'){
+    state='running';
+    pauseBtn.textContent='❙❙ Pause';
+    pauseOverlay.classList.remove('show');
   }
 }
 
-// ── Input ────────────────────────────────────────────────────────
-document.addEventListener('keydown', e => {
-  if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); if(state==='running') dinoJump(); else startOrRestart(); }
-  if (e.code === 'ArrowDown') { e.preventDefault(); if(state==='running') dinoDuck(true); }
+// ── Input ─────────────────────────────────────────────────────────
+document.addEventListener('keydown', e=>{
+  if(e.code==='Space'||e.code==='ArrowUp'){
+    e.preventDefault();
+    if(state==='running')       jump();
+    else if(state==='paused')   togglePause();
+    else                        startGame();
+  }
+  if(e.code==='ArrowDown'){ e.preventDefault(); if(state==='running') duck(true); }
+  if(e.code==='KeyP'){ e.preventDefault(); if(state==='running'||state==='paused') togglePause(); }
 });
-document.addEventListener('keyup', e => {
-  if (e.code === 'ArrowDown') dinoDuck(false);
+document.addEventListener('keyup', e=>{
+  if(e.code==='ArrowDown') duck(false);
 });
-canvas.addEventListener('touchstart', e => { e.preventDefault(); if(state==='running') dinoJump(); else startOrRestart(); }, {passive:false});
-canvas.addEventListener('click', () => { if(state==='running') dinoJump(); else startOrRestart(); });
 
-// ── Start ────────────────────────────────────────────────────────
+canvas.addEventListener('click', ()=>{
+  if(state==='running')     jump();
+  else if(state==='paused') togglePause();
+  else                      startGame();
+});
+canvas.addEventListener('touchstart', e=>{
+  e.preventDefault();
+  if(state==='running')     jump();
+  else if(state==='paused') togglePause();
+  else                      startGame();
+},{passive:false});
+
 loop();
 </script>
 </body>
