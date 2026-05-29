@@ -283,24 +283,59 @@
     btn.addEventListener('click',()=>{const o=menu.classList.toggle('open');btn.classList.toggle('open',o);btn.setAttribute('aria-label',o?'Menü schließen':'Menü öffnen');});
     document.addEventListener('click',e=>{if(!btn.contains(e.target)&&!menu.contains(e.target)){menu.classList.remove('open');btn.classList.remove('open');}});
 
-    // Form submit simulation
-    function handleSubmit() {
+    // Form submit — sends to Vercel serverless function → Resend → gridsink@gmail.com
+    async function handleSubmit() {
       const name    = document.getElementById('fname').value.trim();
       const email   = document.getElementById('femail').value.trim();
+      const subject = document.getElementById('fsubject').value;
       const message = document.getElementById('fmessage').value.trim();
-      if (!name || !email || !message) {
-        // Simple shake on missing fields
-        [document.getElementById('fname'), document.getElementById('femail'), document.getElementById('fmessage')].forEach(el => {
-          if (!el.value.trim()) {
-            el.style.borderColor = 'rgba(255,80,80,0.6)';
-            el.style.boxShadow   = '0 0 0 3px rgba(255,80,80,0.1)';
-            setTimeout(() => { el.style.borderColor=''; el.style.boxShadow=''; }, 2000);
-          }
+
+      // Validate required fields
+      let valid = true;
+      [['fname', name], ['femail', email], ['fmessage', message]].forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (!val) {
+          el.style.borderColor = 'rgba(255,80,80,0.6)';
+          el.style.boxShadow   = '0 0 0 3px rgba(255,80,80,0.1)';
+          setTimeout(() => { el.style.borderColor=''; el.style.boxShadow=''; }, 2000);
+          valid = false;
+        }
+      });
+      if (!valid) return;
+
+      // Loading state
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.textContent = 'Wird gesendet…';
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.6';
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, subject, message }),
         });
-        return;
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          document.getElementById('formContent').style.display = 'none';
+          document.getElementById('successMsg').style.display  = 'block';
+        } else {
+          throw new Error(data.error || 'Unbekannter Fehler');
+        }
+      } catch (err) {
+        submitBtn.textContent = 'Fehler — nochmal versuchen';
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+        submitBtn.style.background = 'rgba(255,80,80,0.15)';
+        submitBtn.style.color = '#ff5566';
+        setTimeout(() => {
+          submitBtn.textContent = 'Nachricht senden →';
+          submitBtn.style.background = '';
+          submitBtn.style.color = '';
+        }, 3000);
       }
-      document.getElementById('formContent').style.display = 'none';
-      document.getElementById('successMsg').style.display  = 'block';
     }
   </script>
 </body>
