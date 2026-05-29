@@ -19,7 +19,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Gridsink Kontakt <noreply@gridsink.com>',
+        from: 'Gridsink Kontakt <noreply@gridsink.de>',
         to:   'gridsink@gmail.com',
         reply_to: email,
         subject: `Neue Nachricht${subject ? ': ' + subject : ''} — von ${name}`,
